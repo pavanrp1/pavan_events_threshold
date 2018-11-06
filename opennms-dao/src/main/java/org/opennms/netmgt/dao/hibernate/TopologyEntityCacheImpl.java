@@ -41,6 +41,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.opennms.netmgt.model.IsIsLinkInfo;
+
 
 public class TopologyEntityCacheImpl implements TopologyEntityCache {
 
@@ -68,13 +70,6 @@ public class TopologyEntityCacheImpl implements TopologyEntityCache {
                 }
             }
     );
-
-    private <Key, Value> LoadingCache<Key, Value> createCache(CacheLoader<Key, Value> loader) {
-        return CacheBuilder
-                .newBuilder()
-                .expireAfterWrite(getCacheDuration(), TimeUnit.SECONDS)
-                .build(loader);
-    }
 
 
     public List<NodeTopologyEntity> getNodeTopolgyEntities() {

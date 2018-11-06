@@ -49,4 +49,10 @@ public class TopologyEntityDaoHibernate extends HibernateDaoSupport implements T
                 "select new org.opennms.netmgt.model.CdpLinkTopologyEntity(l.id, l.node.id, l.cdpCacheIfIndex, " +
                         "l.cdpInterfaceName, l.cdpCacheAddress, l.cdpCacheDeviceId, l.cdpCacheDevicePort) from org.opennms.netmgt.model.CdpLink l");
     }
+
+    @Override
+    public List<IsIsLinkInfo> getIsisLinkInfos() {
+        return (List<IsIsLinkInfo>)getHibernateTemplate().find(
+                "select new org.opennms.netmgt.model.IsIsLinkInfo(l.id, l.node.id, l.isisISAdjNeighSysID) from org.opennms.netmgt.model.IsIsLink l");
+    }
 }

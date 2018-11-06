@@ -67,6 +67,7 @@ import org.opennms.netmgt.model.FilterManager;
 import org.opennms.netmgt.model.IpNetToMedia;
 import org.opennms.netmgt.model.IsIsElement;
 import org.opennms.netmgt.model.IsIsLink;
+import org.opennms.netmgt.model.IsIsLinkInfo;
 import org.opennms.netmgt.model.LldpElement;
 import org.opennms.netmgt.model.LldpLink;
 import org.opennms.netmgt.model.OnmsIpInterface;
@@ -512,17 +513,17 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
         List<IsIsElement> elements = m_isisElementDao.findAll();
         List<IsIsLink> allLinks = m_isisLinkDao.findAll();
 
-        List<Pair<IsIsLink, IsIsLink>> results = matchIsIsLinks(elements, allLinks);
+        List<Pair<IsIsLinkInfo, IsIsLinkInfo>> results = matchIsIsLinks(elements, allLinks);
 
-        for(Pair<IsIsLink, IsIsLink> pair : results) {
-            IsIsLink sourceLink = pair.getLeft();
-            IsIsLink targetLink = pair.getRight();
-            LinkdVertex source = (LinkdVertex) getVertex(TOPOLOGY_NAMESPACE_LINKD, sourceLink.getNode().getNodeId());
+        for(Pair<IsIsLinkInfo, IsIsLinkInfo> pair : results) {
+            IsIsLinkInfo sourceLink = pair.getLeft();
+            IsIsLinkInfo targetLink = pair.getRight();
+            LinkdVertex source = (LinkdVertex) getVertex(TOPOLOGY_NAMESPACE_LINKD, sourceLink.getNodeIdAsString());
             source.getProtocolSupported().add(ProtocolSupported.ISIS);
-            LinkdVertex target = (LinkdVertex) getVertex(TOPOLOGY_NAMESPACE_LINKD, targetLink.getNode().getNodeId());
+            LinkdVertex target = (LinkdVertex) getVertex(TOPOLOGY_NAMESPACE_LINKD, targetLink.getNodeIdAsString());
             target.getProtocolSupported().add(ProtocolSupported.ISIS);
-            OnmsSnmpInterface sourceSnmpInterface = getSnmpInterface(sourceLink.getNode().getId(), sourceLink.getIsisCircIfIndex());
-            OnmsSnmpInterface targetSnmpInterface = getSnmpInterface(targetLink.getNode().getId(), targetLink.getIsisCircIfIndex());
+            OnmsSnmpInterface sourceSnmpInterface = getSnmpInterface(sourceLink.getNodeId(), sourceLink.getIsisCircIfIndex());
+            OnmsSnmpInterface targetSnmpInterface = getSnmpInterface(targetLink.getNodeId(), targetLink.getIsisCircIfIndex());
             connectVertices(getDefaultEdgeId(sourceLink.getId(), targetLink.getId()),
                 source, target,
                 sourceSnmpInterface, targetSnmpInterface,
@@ -532,7 +533,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
         }
     }
 
-    List<Pair<IsIsLink, IsIsLink>> matchIsIsLinks(final List<IsIsElement> elements, final List<IsIsLink> allLinks) {
+    List<Pair<IsIsLinkInfo, IsIsLinkInfo>> matchIsIsLinks(final List<IsIsElement> elements, final List<IsIsLinkInfo> allLinks) {
 
         // 1.) create lookupMaps
         Map<Integer, IsIsElement> elementmap = new HashMap<Integer, IsIsElement>();
@@ -540,9 +541,9 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
             elementmap.put(element.getNode().getId(), element);
         }
 
-        Map<CompositeKey, IsIsLink> targetLinkMap = new HashMap<>();
-        for (IsIsLink targetLink : allLinks) {
-            IsIsElement targetElement = elementmap.get(targetLink.getNode().getId());
+        Map<CompositeKey, IsIsLinkInfo> targetLinkMap = new HashMap<>();
+        for (IsIsLinkInfo targetLink : allLinks) {
+            IsIsElement targetElement = elementmap.get(targetLink.getNodeId());
             targetLinkMap.put(new CompositeKey(targetLink.getIsisISAdjIndex(),
                       targetElement.getIsisSysID(),
                       targetLink.getIsisISAdjNeighSysID()), targetLink);
@@ -550,17 +551,17 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
 
         // 2. iterate
         Set<Integer> parsed = new HashSet<Integer>();
-        List<Pair<IsIsLink, IsIsLink>> results = new ArrayList<>();
+        List<Pair<IsIsLinkInfo, IsIsLinkInfo>> results = new ArrayList<>();
 
-        for (IsIsLink sourceLink : allLinks) {
+        for (IsIsLinkInfo sourceLink : allLinks) {
             if (parsed.contains(sourceLink.getId())) {
                 continue;
             }
             if (LOG.isDebugEnabled()) {
-                LOG.debug("getIsIsLinks: source: {}", sourceLink.printTopology());
+                LOG.debug("getIsIsLinks: source: {}", sourceLink.toString());
             }
-            IsIsElement sourceElement = elementmap.get(sourceLink.getNode().getId());
-            IsIsLink targetLink = targetLinkMap.get(new CompositeKey(sourceLink.getIsisISAdjIndex(),
+            IsIsElement sourceElement = elementmap.get(sourceLink.getNodeId());
+            IsIsLinkInfo targetLink = targetLinkMap.get(new CompositeKey(sourceLink.getIsisISAdjIndex(),
                     sourceLink.getIsisISAdjNeighSysID(),
                     sourceElement.getIsisSysID()));
 
@@ -572,7 +573,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
                 continue;
             }
             if (LOG.isDebugEnabled()) {
-                LOG.debug("getIsIsLinks: target: {}", targetLink.printTopology());
+                LOG.debug("getIsIsLinks: target: {}", targetLink.toString());
             }
             results.add(Pair.of(sourceLink, targetLink));
             parsed.add(sourceLink.getId());
