@@ -33,13 +33,13 @@ import java.util.Objects;
 public class IsIsLinkInfo {
     private final Integer id;
     private final Integer nodeId;
-    private final String isisISAdjIndex;
+    private final Integer isisISAdjIndex;
     private final Integer isisCircIfIndex;
     private final String isisISAdjNeighSysID;
     private final String isisISAdjNeighSNPAAddress;
 
 
-    public IsIsLinkInfo(Integer id, Integer nodeId, String isisISAdjIndex, Integer isisCircIfIndex, String isisISAdjNeighSysID,
+    public IsIsLinkInfo(Integer id, Integer nodeId, Integer isisISAdjIndex, Integer isisCircIfIndex, String isisISAdjNeighSysID,
                         String isisISAdjNeighSNPAAddress){
         this.id = id;
         this.nodeId = nodeId;
@@ -64,7 +64,7 @@ public class IsIsLinkInfo {
         return null;
     }
 
-    public String getIsisISAdjIndex() {
+    public Integer getIsisISAdjIndex() {
         return isisISAdjIndex;
     }
 

@@ -51,7 +51,7 @@ public class TopologyEntityDaoHibernate extends HibernateDaoSupport implements T
     }
 
     @Override
-    public List<IsIsLinkInfo> getIsisLinkInfos() {
+    public List<IsIsLinkInfo> getIsIsLinkInfos() {
         return (List<IsIsLinkInfo>)getHibernateTemplate().find(
                 "select new org.opennms.netmgt.model.IsIsLinkInfo(l.id, l.node.id, l.isisISAdjNeighSysID) from org.opennms.netmgt.model.IsIsLink l");
     }

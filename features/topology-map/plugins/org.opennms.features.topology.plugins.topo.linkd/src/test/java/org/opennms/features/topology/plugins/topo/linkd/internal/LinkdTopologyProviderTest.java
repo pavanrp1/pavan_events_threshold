@@ -29,7 +29,6 @@
 package org.opennms.features.topology.plugins.topo.linkd.internal;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ import org.opennms.core.utils.LldpUtils;
 import org.opennms.netmgt.model.CdpElement;
 import org.opennms.netmgt.model.CdpLinkTopologyEntity;
 import org.opennms.netmgt.model.IsIsElement;
-import org.opennms.netmgt.model.IsIsLink;
+import org.opennms.netmgt.model.IsIsLinkInfo;
 import org.opennms.netmgt.model.LldpElement;
 import org.opennms.netmgt.model.LldpLink;
 import org.opennms.netmgt.model.OnmsNode;
@@ -96,7 +95,7 @@ public class LinkdTopologyProviderTest {
                 createIsIsElement(nodes.get(5), "2.2")
             );
 
-        List<IsIsLink> allLinks = Arrays.asList(
+        List<IsIsLinkInfo> allLinks = Arrays.asList(
                 createIsIsLink(0, "nomatch2", 100, nodes.get(0)),
                 createIsIsLink(1, "1.2", 11, nodes.get(1)),
                 createIsIsLink(2, "nomatch3", 101, nodes.get(2)),
@@ -105,7 +104,7 @@ public class LinkdTopologyProviderTest {
                 createIsIsLink(5, "2.3", 22, nodes.get(5))
         );
 
-        List<Pair<IsIsLink, IsIsLink>> matchedLinks = provider.matchIsIsLinks(elements, allLinks);
+        List<Pair<IsIsLinkInfo, IsIsLinkInfo>> matchedLinks = provider.matchIsIsLinks(elements, allLinks);
 
         assertMatching(allLinks, matchedLinks);
     }
@@ -289,15 +288,10 @@ public class LinkdTopologyProviderTest {
         return element;
     }
 
-    private IsIsLink createIsIsLink(int id, String isisISAdjNeighSysID, int isisISAdjIndex, OnmsNode node) {
-        IsIsLink link = new IsIsLink();
-        link.setId(id);
-        link.setIsisCircAdminState(IsIsElement.IsisAdminState.off);
-        link.setIsisISAdjState(IsIsLink.IsisISAdjState.up);
-        link.setIsisISAdjNeighSysID(isisISAdjNeighSysID);
-        link.setIsisISAdjNeighSysType(IsIsLink.IsisISAdjNeighSysType.unknown);
-        link.setIsisISAdjIndex(isisISAdjIndex);
-        link.setNode(node);
+    private IsIsLinkInfo createIsIsLink(int id, String isisISAdjNeighSysID, Integer isisISAdjIndex, OnmsNode node) {
+        Integer isisCircIfIndex = 3;
+        String isisISAdjNeighSNPAddress = "abcdef";
+        IsIsLinkInfo link = new IsIsLinkInfo(id, node.getId(), isisISAdjIndex, isisCircIfIndex, isisISAdjNeighSysID, isisISAdjNeighSNPAddress);
         return link;
     }
 
