@@ -50,9 +50,9 @@ import org.opennms.netmgt.model.CdpLinkTopologyEntity;
 import org.opennms.netmgt.model.IsIsElement;
 import org.opennms.netmgt.model.IsIsLinkInfo;
 import org.opennms.netmgt.model.LldpElement;
-import org.opennms.netmgt.model.LldpLink;
+import org.opennms.netmgt.model.LldpLinkInfo;
 import org.opennms.netmgt.model.OnmsNode;
-import org.opennms.netmgt.model.OspfLink;
+import org.opennms.netmgt.model.OspfLinkInfo;
 import org.opennms.netmgt.model.topology.Topology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,7 +149,7 @@ public class LinkdTopologyProviderTest {
         List<OnmsNode> nodes = createNodes(6);
         List<InetAddress> addresses = createInetAddresses(6);
 
-        List<OspfLink> allLinks = Arrays.asList(
+        List<OspfLinkInfo> allLinks = Arrays.asList(
                 createOspfLink(0, nodes.get(0), addresses.get(0), addresses.get(5)),
                 createOspfLink(1, nodes.get(1), addresses.get(1), addresses.get(3)),
                 createOspfLink(2, nodes.get(2), addresses.get(2), addresses.get(3)),
@@ -158,7 +158,7 @@ public class LinkdTopologyProviderTest {
                 createOspfLink(5, nodes.get(5), addresses.get(5), addresses.get(4))
         );
 
-        List<Pair<OspfLink, OspfLink>> matchedLinks = provider.matchOspfLinks(allLinks);
+        List<Pair<OspfLinkInfo, OspfLinkInfo>> matchedLinks = provider.matchOspfLinks(allLinks);
         assertMatching(allLinks, matchedLinks);
     }
 
@@ -177,7 +177,7 @@ public class LinkdTopologyProviderTest {
         elements.put(4, createLldpElement(nodes.get(4), "match2.1"));
         elements.put(5, createLldpElement(nodes.get(5), "match2.2"));
 
-        List<LldpLink> allLinks = Arrays.asList(
+        List<LldpLinkInfo> allLinks = Arrays.asList(
            createLldpLink(0, nodes.get(0), "nomatch1", LldpUtils.LldpPortIdSubType.LLDP_PORTID_SUBTYPE_PORTCOMPONENT,  "nomatch2", LldpUtils.LldpPortIdSubType.LLDP_PORTID_SUBTYPE_PORTCOMPONENT, "nomatch3"),
                 createLldpLink(1, nodes.get(1), "match1.5", LldpUtils.LldpPortIdSubType.LLDP_PORTID_SUBTYPE_INTERFACENAME,  "match1.3", LldpUtils.LldpPortIdSubType.LLDP_PORTID_SUBTYPE_MACADDRESS, "match1.2"),
                 createLldpLink(2, nodes.get(2), "nomatch4", LldpUtils.LldpPortIdSubType.LLDP_PORTID_SUBTYPE_PORTCOMPONENT,  "nomatch5", LldpUtils.LldpPortIdSubType.LLDP_PORTID_SUBTYPE_PORTCOMPONENT, "nomatch6"),
@@ -185,7 +185,7 @@ public class LinkdTopologyProviderTest {
                 createLldpLink(4, nodes.get(4), "match2.5", LldpUtils.LldpPortIdSubType.LLDP_PORTID_SUBTYPE_AGENTCIRCUITID,  "match2.3", LldpUtils.LldpPortIdSubType.LLDP_PORTID_SUBTYPE_INTERFACEALIAS, "match2.2"),
                 createLldpLink(5, nodes.get(5), "match2.3", LldpUtils.LldpPortIdSubType.LLDP_PORTID_SUBTYPE_INTERFACEALIAS,  "match2.5", LldpUtils.LldpPortIdSubType.LLDP_PORTID_SUBTYPE_AGENTCIRCUITID, "match2.1")
         );
-        List<Pair<LldpLink, LldpLink>> matchedLinks = provider.matchLldpLinks(elements, allLinks);
+        List<Pair<LldpLinkInfo, LldpLinkInfo>> matchedLinks = provider.matchLldpLinks(elements, allLinks);
         assertMatching(allLinks, matchedLinks);
     }
 
@@ -224,26 +224,23 @@ public class LinkdTopologyProviderTest {
         return element;
     }
 
-    private LldpLink createLldpLink(int id, OnmsNode node, String portId, LldpUtils.LldpPortIdSubType portIdSubType
+    private LldpLinkInfo createLldpLink(int id, OnmsNode node, String portId, LldpUtils.LldpPortIdSubType portIdSubType
             , String remotePortId, LldpUtils.LldpPortIdSubType remotePortIdSubType, String remoteChassisId) {
-          LldpLink link = new LldpLink();
-            link.setId(id);
-            link.setLldpPortId(portId);
-            link.setLldpPortIdSubType(portIdSubType);
-            link.setLldpRemPortId(remotePortId);
-            link.setLldpRemPortIdSubType(remotePortIdSubType);
-            link.setLldpRemChassisId(remoteChassisId);
-            link.setLldpRemChassisIdSubType(LldpUtils.LldpChassisIdSubType.LLDP_CHASSISID_SUBTYPE_CHASSISCOMPONENT); // shouldn't be relevant for match => set it fixed
-            link.setNode(node);
+          LldpLinkInfo link = new LldpLinkInfo(
+                  id,
+                  node.getId(),
+                  remoteChassisId,
+                  remotePortId,
+                  remotePortIdSubType,
+                  portId,
+                  portIdSubType,
+                  "portDescription",
+                  3);
         return link;
     }
 
-    private OspfLink createOspfLink(int id, OnmsNode node, InetAddress ipAddress, InetAddress remoteAddress) {
-        OspfLink link = new OspfLink();
-        link.setId(id);
-        link.setNode(node);
-        link.setOspfIpAddr(ipAddress);
-        link.setOspfRemIpAddr(remoteAddress);
+    private OspfLinkInfo createOspfLink(int id, OnmsNode node, InetAddress ipAddress, InetAddress remoteAddress) {
+        OspfLinkInfo link = new OspfLinkInfo(id, node.getId(), ipAddress, remoteAddress, 3);
         return link;
     }
 
