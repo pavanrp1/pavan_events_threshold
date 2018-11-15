@@ -28,22 +28,25 @@
 
 package org.opennms.netmgt.model;
 
-import java.net.InetAddress;
 import java.util.Objects;
 
-public class OspfLinkInfo {
+public class IsIsLinkTopologyEntity {
     private final Integer id;
     private final Integer nodeId;
-    private final InetAddress ospfIpAddr;
-    private final InetAddress ospfRemIpAddr;
-    private final Integer ospfIfIndex;
+    private final Integer isisISAdjIndex;
+    private final Integer isisCircIfIndex;
+    private final String isisISAdjNeighSysID;
+    private final String isisISAdjNeighSNPAAddress;
 
-    public OspfLinkInfo(Integer id, Integer nodeId, InetAddress ospfIpAddr, InetAddress ospfRemIpAddr, Integer ospfIfIndex) {
+
+    public IsIsLinkTopologyEntity(Integer id, Integer nodeId, Integer isisISAdjIndex, Integer isisCircIfIndex, String isisISAdjNeighSysID,
+                                  String isisISAdjNeighSNPAAddress){
         this.id = id;
         this.nodeId = nodeId;
-        this.ospfIpAddr = ospfIpAddr;
-        this.ospfRemIpAddr = ospfRemIpAddr;
-        this.ospfIfIndex = ospfIfIndex;
+        this.isisISAdjIndex = isisISAdjIndex;
+        this.isisCircIfIndex = isisCircIfIndex;
+        this.isisISAdjNeighSysID = isisISAdjNeighSysID;
+        this.isisISAdjNeighSNPAAddress = isisISAdjNeighSNPAAddress;
     }
 
     public Integer getId() {
@@ -61,44 +64,50 @@ public class OspfLinkInfo {
         return null;
     }
 
-    public InetAddress getOspfIpAddr() {
-        return ospfIpAddr;
+    public Integer getIsisISAdjIndex() {
+        return isisISAdjIndex;
     }
 
-    public InetAddress getOspfRemIpAddr() {
-        return ospfRemIpAddr;
+    public Integer getIsisCircIfIndex() {
+        return isisCircIfIndex;
     }
 
-    public Integer getOspfIfIndex() {
-        return ospfIfIndex;
+    public String getIsisISAdjNeighSysID() {
+        return isisISAdjNeighSysID;
+    }
+
+    public String getIsisISAdjNeighSNPAAddress() {
+        return isisISAdjNeighSNPAAddress;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OspfLinkInfo that = (OspfLinkInfo) o;
+        IsIsLinkTopologyEntity that = (IsIsLinkTopologyEntity) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(nodeId, that.nodeId) &&
-                Objects.equals(ospfIpAddr, that.ospfIpAddr) &&
-                Objects.equals(ospfRemIpAddr, that.ospfRemIpAddr) &&
-                Objects.equals(ospfIfIndex, that.ospfIfIndex);
+                Objects.equals(isisISAdjIndex, that.isisISAdjIndex) &&
+                Objects.equals(isisCircIfIndex, that.isisCircIfIndex) &&
+                Objects.equals(isisISAdjNeighSysID, that.isisISAdjNeighSysID) &&
+                Objects.equals(isisISAdjNeighSNPAAddress, that.isisISAdjNeighSNPAAddress);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, nodeId, ospfIpAddr, ospfRemIpAddr, ospfIfIndex);
+        return Objects.hash(id, nodeId, isisISAdjIndex, isisCircIfIndex, isisISAdjNeighSysID, isisISAdjNeighSNPAAddress);
     }
 
     @Override
     public String toString() {
-        return "OspfLinkInfo{" +
+        return "IsIsLinkInfo{" +
                 "id=" + id +
                 ", nodeId=" + nodeId +
-                ", ospfIpAddr=" + ospfIpAddr +
-                ", ospfRemIpAddr=" + ospfRemIpAddr +
-                ", ospfIfIndex=" + ospfIfIndex +
+                ", isisISAdjIndex='" + isisISAdjIndex + '\'' +
+                ", isisCircIfIndex=" + isisCircIfIndex +
+                ", isisISAdjNeighSysID='" + isisISAdjNeighSysID + '\'' +
+                ", isisISAdjNeighSNPAAddress='" + isisISAdjNeighSNPAAddress + '\'' +
                 '}';
     }
 }

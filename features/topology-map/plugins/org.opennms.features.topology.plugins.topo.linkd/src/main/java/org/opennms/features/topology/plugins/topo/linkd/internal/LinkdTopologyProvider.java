@@ -66,13 +66,13 @@ import org.opennms.netmgt.model.CdpLinkTopologyEntity;
 import org.opennms.netmgt.model.FilterManager;
 import org.opennms.netmgt.model.IpNetToMedia;
 import org.opennms.netmgt.model.IsIsElement;
-import org.opennms.netmgt.model.IsIsLinkInfo;
+import org.opennms.netmgt.model.IsIsLinkTopologyEntity;
 import org.opennms.netmgt.model.LldpElement;
-import org.opennms.netmgt.model.LldpLinkInfo;
+import org.opennms.netmgt.model.LldpLinkTopologyEntity;
 import org.opennms.netmgt.model.OnmsIpInterface;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsSnmpInterface;
-import org.opennms.netmgt.model.OspfLinkInfo;
+import org.opennms.netmgt.model.OspfLinkTopologyEntity;
 import org.opennms.netmgt.model.PrimaryType;
 import org.opennms.netmgt.model.NodeTopologyEntity;
 import org.opennms.netmgt.model.topology.BridgePort;
@@ -277,7 +277,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
 
     private void getLldpLinks() {
 
-        List<LldpLinkInfo> allLinks = m_topologyEntityCache.getLldpLinkInfos();
+        List<LldpLinkTopologyEntity> allLinks = m_topologyEntityCache.getLldpLinkTopologyEntities();
         // Index the LLDP elements by node id
         Map<Integer, LldpElement> nodelldpelementidMap = new HashMap<Integer, LldpElement>();
         Map<Integer, LinkdVertex> nodeVertexMap = new HashMap<Integer, LinkdVertex>();
@@ -289,11 +289,11 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
             System.err.println(vertex.getId());
         }
 
-        List<Pair<LldpLinkInfo, LldpLinkInfo>> matchedLinks = matchLldpLinks(nodelldpelementidMap, allLinks);
+        List<Pair<LldpLinkTopologyEntity, LldpLinkTopologyEntity>> matchedLinks = matchLldpLinks(nodelldpelementidMap, allLinks);
 
-        for (Pair<LldpLinkInfo, LldpLinkInfo> pair : matchedLinks) {
-            LldpLinkInfo sourceLink = pair.getLeft();
-            LldpLinkInfo targetLink = pair.getRight();
+        for (Pair<LldpLinkTopologyEntity, LldpLinkTopologyEntity> pair : matchedLinks) {
+            LldpLinkTopologyEntity sourceLink = pair.getLeft();
+            LldpLinkTopologyEntity targetLink = pair.getRight();
             LinkdVertex source = nodeVertexMap.get(sourceLink.getNodeId());
             LinkdVertex target = nodeVertexMap.get(targetLink.getNodeId());
             OnmsSnmpInterface sourceSnmpInterface = getSnmpInterface(sourceLink.getNodeId(), sourceLink.getLldpPortIfindex());
@@ -306,12 +306,12 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
         }
     }
 
-    List<Pair<LldpLinkInfo, LldpLinkInfo>> matchLldpLinks(Map<Integer, LldpElement> nodelldpelementidMap, List<LldpLinkInfo> allLinks) {
-        List<Pair<LldpLinkInfo, LldpLinkInfo>> results = new ArrayList<>();
+    List<Pair<LldpLinkTopologyEntity, LldpLinkTopologyEntity>> matchLldpLinks(Map<Integer, LldpElement> nodelldpelementidMap, List<LldpLinkTopologyEntity> allLinks) {
+        List<Pair<LldpLinkTopologyEntity, LldpLinkTopologyEntity>> results = new ArrayList<>();
 
         // 1.) create mapping
-        Map<CompositeKey, LldpLinkInfo> targetLinkMap = new HashMap<>();
-        for(LldpLinkInfo targetLink : allLinks){
+        Map<CompositeKey, LldpLinkTopologyEntity> targetLinkMap = new HashMap<>();
+        for(LldpLinkTopologyEntity targetLink : allLinks){
 
             CompositeKey key = new CompositeKey(
                     targetLink.getLldpRemChassisId(),
@@ -325,7 +325,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
 
         // 2.) iterate
         Set<Integer> parsed = new HashSet<Integer>();
-        for (LldpLinkInfo sourceLink : allLinks) {
+        for (LldpLinkTopologyEntity sourceLink : allLinks) {
             if (parsed.contains(sourceLink.getId())) {
                 continue;
             }
@@ -348,7 +348,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
                     sourceLink.getLldpRemPortIdSubType(),
                     sourceLink.getLldpPortId(),
                     sourceLink.getLldpPortIdSubType());
-            LldpLinkInfo targetLink = targetLinkMap.get(key);
+            LldpLinkTopologyEntity targetLink = targetLinkMap.get(key);
 
             if (targetLink == null) {
                 LOG.debug("getLldpLinks: cannot found target for source: '{}'", sourceLink.getId());
@@ -368,12 +368,12 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
 
     private void getOspfLinks() {
 
-        List<OspfLinkInfo> allLinks = m_topologyEntityCache.getOspfLinkInfos();
-        List<Pair<OspfLinkInfo, OspfLinkInfo>> matchedLinks = matchOspfLinks(allLinks);
+        List<OspfLinkTopologyEntity> allLinks = m_topologyEntityCache.getOspfLinkTopologyEntities();
+        List<Pair<OspfLinkTopologyEntity, OspfLinkTopologyEntity>> matchedLinks = matchOspfLinks(allLinks);
 
-        for (Pair<OspfLinkInfo, OspfLinkInfo> pair : matchedLinks) {
-            OspfLinkInfo sourceLink = pair.getLeft();
-            OspfLinkInfo targetLink = pair.getRight();
+        for (Pair<OspfLinkTopologyEntity, OspfLinkTopologyEntity> pair : matchedLinks) {
+            OspfLinkTopologyEntity sourceLink = pair.getLeft();
+            OspfLinkTopologyEntity targetLink = pair.getRight();
 
             LinkdVertex source = (LinkdVertex)getVertex(TOPOLOGY_NAMESPACE_LINKD, sourceLink.getNodeIdAsString());
             source.getProtocolSupported().add(ProtocolSupported.OSPF);
@@ -390,17 +390,17 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
         }
     }
 
-    List<Pair<OspfLinkInfo, OspfLinkInfo>> matchOspfLinks(List<OspfLinkInfo> allLinks){
-        List<Pair<OspfLinkInfo, OspfLinkInfo>> results = new ArrayList<>();
+    List<Pair<OspfLinkTopologyEntity, OspfLinkTopologyEntity>> matchOspfLinks(List<OspfLinkTopologyEntity> allLinks){
+        List<Pair<OspfLinkTopologyEntity, OspfLinkTopologyEntity>> results = new ArrayList<>();
         Set<Integer> parsed = new HashSet<Integer>();
 
         // build mapping:
-        Map<CompositeKey, OspfLinkInfo> targetLinks = new HashMap<>();
-        for(OspfLinkInfo targetLink : allLinks){
+        Map<CompositeKey, OspfLinkTopologyEntity> targetLinks = new HashMap<>();
+        for(OspfLinkTopologyEntity targetLink : allLinks){
             targetLinks.put(new CompositeKey(targetLink.getOspfIpAddr(), targetLink.getOspfRemIpAddr()) , targetLink);
         }
 
-        for(OspfLinkInfo sourceLink : allLinks) {
+        for(OspfLinkTopologyEntity sourceLink : allLinks) {
             if (parsed.contains(sourceLink.getId())) {
                 continue;
             }
@@ -408,7 +408,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
             if (LOG.isDebugEnabled()) {
                 LOG.debug("getOspfLinks: source: {}", sourceLink.toString());
             }
-            OspfLinkInfo targetLink = targetLinks.get(new CompositeKey(sourceLink.getOspfRemIpAddr() , sourceLink.getOspfIpAddr()));
+            OspfLinkTopologyEntity targetLink = targetLinks.get(new CompositeKey(sourceLink.getOspfRemIpAddr() , sourceLink.getOspfIpAddr()));
             if(targetLink == null) {
                 LOG.debug("getOspfLinks: cannot find target for source: '{}'", sourceLink.getId());
                 continue;
@@ -510,13 +510,13 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
     private void getIsIsLinks() {
 
         List<IsIsElement> elements = m_isisElementDao.findAll();
-        List<IsIsLinkInfo> allLinks = m_topologyEntityCache.getIsIsLinkInfos();
+        List<IsIsLinkTopologyEntity> allLinks = m_topologyEntityCache.getIsIsLinkTopologyEntities();
 
-        List<Pair<IsIsLinkInfo, IsIsLinkInfo>> results = matchIsIsLinks(elements, allLinks);
+        List<Pair<IsIsLinkTopologyEntity, IsIsLinkTopologyEntity>> results = matchIsIsLinks(elements, allLinks);
 
-        for(Pair<IsIsLinkInfo, IsIsLinkInfo> pair : results) {
-            IsIsLinkInfo sourceLink = pair.getLeft();
-            IsIsLinkInfo targetLink = pair.getRight();
+        for(Pair<IsIsLinkTopologyEntity, IsIsLinkTopologyEntity> pair : results) {
+            IsIsLinkTopologyEntity sourceLink = pair.getLeft();
+            IsIsLinkTopologyEntity targetLink = pair.getRight();
             LinkdVertex source = (LinkdVertex) getVertex(TOPOLOGY_NAMESPACE_LINKD, sourceLink.getNodeIdAsString());
             source.getProtocolSupported().add(ProtocolSupported.ISIS);
             LinkdVertex target = (LinkdVertex) getVertex(TOPOLOGY_NAMESPACE_LINKD, targetLink.getNodeIdAsString());
@@ -532,7 +532,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
         }
     }
 
-    List<Pair<IsIsLinkInfo, IsIsLinkInfo>> matchIsIsLinks(final List<IsIsElement> elements, final List<IsIsLinkInfo> allLinks) {
+    List<Pair<IsIsLinkTopologyEntity, IsIsLinkTopologyEntity>> matchIsIsLinks(final List<IsIsElement> elements, final List<IsIsLinkTopologyEntity> allLinks) {
 
         // 1.) create lookupMaps
         Map<Integer, IsIsElement> elementmap = new HashMap<Integer, IsIsElement>();
@@ -540,8 +540,8 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
             elementmap.put(element.getNode().getId(), element);
         }
 
-        Map<CompositeKey, IsIsLinkInfo> targetLinkMap = new HashMap<>();
-        for (IsIsLinkInfo targetLink : allLinks) {
+        Map<CompositeKey, IsIsLinkTopologyEntity> targetLinkMap = new HashMap<>();
+        for (IsIsLinkTopologyEntity targetLink : allLinks) {
             IsIsElement targetElement = elementmap.get(targetLink.getNodeId());
             targetLinkMap.put(new CompositeKey(targetLink.getIsisISAdjIndex(),
                       targetElement.getIsisSysID(),
@@ -550,9 +550,9 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
 
         // 2. iterate
         Set<Integer> parsed = new HashSet<Integer>();
-        List<Pair<IsIsLinkInfo, IsIsLinkInfo>> results = new ArrayList<>();
+        List<Pair<IsIsLinkTopologyEntity, IsIsLinkTopologyEntity>> results = new ArrayList<>();
 
-        for (IsIsLinkInfo sourceLink : allLinks) {
+        for (IsIsLinkTopologyEntity sourceLink : allLinks) {
             if (parsed.contains(sourceLink.getId())) {
                 continue;
             }
@@ -560,7 +560,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
                 LOG.debug("getIsIsLinks: source: {}", sourceLink.toString());
             }
             IsIsElement sourceElement = elementmap.get(sourceLink.getNodeId());
-            IsIsLinkInfo targetLink = targetLinkMap.get(new CompositeKey(sourceLink.getIsisISAdjIndex(),
+            IsIsLinkTopologyEntity targetLink = targetLinkMap.get(new CompositeKey(sourceLink.getIsisISAdjIndex(),
                     sourceLink.getIsisISAdjNeighSysID(),
                     sourceElement.getIsisSysID()));
 

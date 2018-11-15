@@ -32,15 +32,15 @@ import java.util.List;
 
 import org.opennms.netmgt.model.CdpLinkTopologyEntity;
 import org.opennms.netmgt.model.NodeTopologyEntity;
-import org.opennms.netmgt.model.IsIsLinkInfo;
-import org.opennms.netmgt.model.LldpLinkInfo;
-import org.opennms.netmgt.model.OspfLinkInfo;
+import org.opennms.netmgt.model.IsIsLinkTopologyEntity;
+import org.opennms.netmgt.model.LldpLinkTopologyEntity;
+import org.opennms.netmgt.model.OspfLinkTopologyEntity;
 
 
 public interface TopologyEntityDao {
     List<NodeTopologyEntity> getNodeTopologyEntities();
     List<CdpLinkTopologyEntity> getCdpLinkTopologyEntities();
-    List<IsIsLinkInfo> getIsIsLinkInfos();
-    List<LldpLinkInfo> getLldpLinkInfos();
-    List<OspfLinkInfo> getOspfLinkInfos();
+    List<IsIsLinkTopologyEntity> getIsIsLinkTopologyEntities();
+    List<LldpLinkTopologyEntity> getLldpLinkTopologyEntities();
+    List<OspfLinkTopologyEntity> getOspfLinkTopologyEntities();
 }

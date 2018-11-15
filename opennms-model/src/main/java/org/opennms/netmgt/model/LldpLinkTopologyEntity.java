@@ -32,7 +32,7 @@ import java.util.Objects;
 
 import org.opennms.core.utils.LldpUtils;
 
-public class LldpLinkInfo {
+public class LldpLinkTopologyEntity {
 
     private final Integer id;
     private final Integer nodeId;
@@ -44,9 +44,9 @@ public class LldpLinkInfo {
     private final String lldpPortDescr;
     private final Integer lldpPortIfindex;
 
-    public LldpLinkInfo(Integer id, Integer nodeId, String lldpRemChassisId, String lldpRemPortId,
-                        LldpUtils.LldpPortIdSubType lldpRemPortIdSubType, String lldpPortId,
-                        LldpUtils.LldpPortIdSubType lldpPortIdSubType, String lldpPortDescr, Integer lldpPortIfindex) {
+    public LldpLinkTopologyEntity(Integer id, Integer nodeId, String lldpRemChassisId, String lldpRemPortId,
+                                  LldpUtils.LldpPortIdSubType lldpRemPortIdSubType, String lldpPortId,
+                                  LldpUtils.LldpPortIdSubType lldpPortIdSubType, String lldpPortDescr, Integer lldpPortIfindex) {
         this.id = id;
         this.nodeId = nodeId;
         this.lldpRemChassisId = lldpRemChassisId;
@@ -105,7 +105,7 @@ public class LldpLinkInfo {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LldpLinkInfo that = (LldpLinkInfo) o;
+        LldpLinkTopologyEntity that = (LldpLinkTopologyEntity) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(nodeId, that.nodeId) &&
                 Objects.equals(lldpRemChassisId, that.lldpRemChassisId) &&

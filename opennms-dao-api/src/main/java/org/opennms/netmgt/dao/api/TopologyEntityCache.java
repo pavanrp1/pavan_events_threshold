@@ -31,11 +31,10 @@ package org.opennms.netmgt.dao.api;
 import java.util.List;
 
 import org.opennms.netmgt.model.CdpLinkTopologyEntity;
+import org.opennms.netmgt.model.IsIsLinkTopologyEntity;
+import org.opennms.netmgt.model.LldpLinkTopologyEntity;
 import org.opennms.netmgt.model.NodeTopologyEntity;
-import org.opennms.netmgt.model.IsIsLinkInfo;
-import org.opennms.netmgt.model.LldpLinkInfo;
-import org.opennms.netmgt.model.OspfLinkInfo;
-import org.opennms.netmgt.model.VertexInfo;
+import org.opennms.netmgt.model.OspfLinkTopologyEntity;
 
 public interface TopologyEntityCache {
 
@@ -43,11 +42,11 @@ public interface TopologyEntityCache {
 
     List<CdpLinkTopologyEntity> getCdpLinkTopologyEntities();
 
-    List<IsIsLinkInfo> getIsIsLinkInfos();
+    List<OspfLinkTopologyEntity> getOspfLinkTopologyEntities();
 
-    List<LldpLinkInfo> getLldpLinkInfos();
+    List<IsIsLinkTopologyEntity> getIsIsLinkTopologyEntities();
 
-    List<OspfLinkInfo> getOspfLinkInfos();
+    List<LldpLinkTopologyEntity> getLldpLinkTopologyEntities();
 
     void refresh();
 
