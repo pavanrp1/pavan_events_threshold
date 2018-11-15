@@ -33,11 +33,9 @@ import java.util.List;
 import org.opennms.netmgt.dao.api.TopologyEntityDao;
 import org.opennms.netmgt.model.CdpLinkTopologyEntity;
 import org.opennms.netmgt.model.NodeTopologyEntity;
-import org.opennms.netmgt.model.CdpLinkInfo;
 import org.opennms.netmgt.model.IsIsLinkTopologyEntity;
 import org.opennms.netmgt.model.LldpLinkTopologyEntity;
 import org.opennms.netmgt.model.OspfLinkTopologyEntity;
-import org.opennms.netmgt.model.VertexInfo;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 public class TopologyEntityDaoHibernate extends HibernateDaoSupport implements TopologyEntityDao {
