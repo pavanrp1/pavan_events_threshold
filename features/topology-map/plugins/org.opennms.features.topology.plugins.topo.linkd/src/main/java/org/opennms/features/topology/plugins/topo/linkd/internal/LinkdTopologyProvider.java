@@ -64,7 +64,7 @@ import org.opennms.netmgt.enlinkd.service.api.IsisTopologyService;
 import org.opennms.netmgt.enlinkd.service.api.LldpTopologyService;
 import org.opennms.netmgt.enlinkd.service.api.OspfTopologyService;
 import org.opennms.netmgt.enlinkd.service.api.SharedSegment;
-import org.opennms.netmgt.enlinkd.service.api.Topology;
+import org.opennms.netmgt.enlinkd.service.api.ProtocolSupported;
 import org.opennms.netmgt.model.FilterManager;
 import org.opennms.netmgt.model.OnmsIpInterface;
 import org.opennms.netmgt.model.OnmsNode;
@@ -189,7 +189,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
             OnmsSnmpInterface targetInterface,
             String sourceAddr,
             String targetAddr,
-            Topology.ProtocolSupported discoveredBy) {
+            ProtocolSupported discoveredBy) {
         addEdges(LinkdEdge.create(id, sourceV, targetV, sourceinterface, targetInterface,sourceAddr,targetAddr,discoveredBy));
     }
     
@@ -260,16 +260,16 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
             LldpLink sourceLink = pair.getLeft();
             LldpLink targetLink = pair.getRight();
             LinkdVertex source = (LinkdVertex) getVertex(TOPOLOGY_NAMESPACE_LINKD, sourceLink.getNode().getNodeId());
-            source.getProtocolSupported().add(Topology.ProtocolSupported.LLDP);
+            source.getProtocolSupported().add(ProtocolSupported.LLDP);
             LinkdVertex target = (LinkdVertex) getVertex(TOPOLOGY_NAMESPACE_LINKD, targetLink.getNode().getNodeId());
-            target.getProtocolSupported().add(Topology.ProtocolSupported.LLDP);
+            target.getProtocolSupported().add(ProtocolSupported.LLDP);
             OnmsSnmpInterface sourceSnmpInterface = getSnmpInterface(sourceLink.getNode().getId(), sourceLink.getLldpPortIfindex());
             OnmsSnmpInterface targetSnmpInterface = getSnmpInterface(targetLink.getNode().getId(), targetLink.getLldpPortIfindex());
             connectVertices(getDefaultEdgeId(sourceLink.getId(), targetLink.getId()),
                     source,target,
                     sourceSnmpInterface,targetSnmpInterface,
                     sourceLink.getLldpPortDescr(),targetLink.getLldpPortDescr(),
-                    Topology.ProtocolSupported.LLDP);
+                    ProtocolSupported.LLDP);
         }
     }
 
@@ -280,9 +280,9 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
             OspfLink targetLink = pair.getRight();
 
             LinkdVertex source = (LinkdVertex)getVertex(TOPOLOGY_NAMESPACE_LINKD, sourceLink.getNode().getNodeId());
-            source.getProtocolSupported().add(Topology.ProtocolSupported.OSPF);
+            source.getProtocolSupported().add(ProtocolSupported.OSPF);
             LinkdVertex target = (LinkdVertex)getVertex(TOPOLOGY_NAMESPACE_LINKD, targetLink.getNode().getNodeId());
-            target.getProtocolSupported().add(Topology.ProtocolSupported.OSPF);
+            target.getProtocolSupported().add(ProtocolSupported.OSPF);
             OnmsSnmpInterface sourceSnmpInterface = getSnmpInterface(sourceLink.getNode().getId(), sourceLink.getOspfIfIndex());
             OnmsSnmpInterface targetSnmpInterface = getSnmpInterface(targetLink.getNode().getId(), targetLink.getOspfIfIndex());
             connectVertices(getDefaultEdgeId(sourceLink.getId(), targetLink.getId()),
@@ -290,7 +290,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
                     sourceSnmpInterface,targetSnmpInterface,
                     InetAddressUtils.str(targetLink.getOspfRemIpAddr()),
                     InetAddressUtils.str(sourceLink.getOspfRemIpAddr()),
-                    Topology.ProtocolSupported.OSPF);
+                    ProtocolSupported.OSPF);
         }
     }
 
@@ -300,9 +300,9 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
             CdpLink sourceLink = pair.getLeft();
             CdpLink targetLink = pair.getRight();
             LinkdVertex source = (LinkdVertex) getVertex(TOPOLOGY_NAMESPACE_LINKD, sourceLink.getNode().getNodeId());
-            source.getProtocolSupported().add(Topology.ProtocolSupported.CDP);
+            source.getProtocolSupported().add(ProtocolSupported.CDP);
             LinkdVertex target = (LinkdVertex) getVertex(TOPOLOGY_NAMESPACE_LINKD, targetLink.getNode().getNodeId());
-            target.getProtocolSupported().add(Topology.ProtocolSupported.CDP);
+            target.getProtocolSupported().add(ProtocolSupported.CDP);
             OnmsSnmpInterface sourceSnmpInterface = getSnmpInterface(sourceLink.getNode().getId(), sourceLink.getCdpCacheIfIndex());
             OnmsSnmpInterface targetSnmpInterface = getSnmpInterface(targetLink.getNode().getId(), targetLink.getCdpCacheIfIndex());
             connectVertices(getDefaultEdgeId(sourceLink.getId(), targetLink.getId()),
@@ -310,7 +310,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
                 sourceSnmpInterface, targetSnmpInterface,
                 targetLink.getCdpCacheAddress(),
                 sourceLink.getCdpCacheAddress(),
-                Topology.ProtocolSupported.CDP);
+                ProtocolSupported.CDP);
         }
     }
 
@@ -320,9 +320,9 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
             IsIsLink sourceLink = pair.getLeft();
             IsIsLink targetLink = pair.getRight();
             LinkdVertex source = (LinkdVertex) getVertex(TOPOLOGY_NAMESPACE_LINKD, sourceLink.getNode().getNodeId());
-            source.getProtocolSupported().add(Topology.ProtocolSupported.ISIS);
+            source.getProtocolSupported().add(ProtocolSupported.ISIS);
             LinkdVertex target = (LinkdVertex) getVertex(TOPOLOGY_NAMESPACE_LINKD, targetLink.getNode().getNodeId());
-            target.getProtocolSupported().add(Topology.ProtocolSupported.ISIS);
+            target.getProtocolSupported().add(ProtocolSupported.ISIS);
             OnmsSnmpInterface sourceSnmpInterface = getSnmpInterface(sourceLink.getNode().getId(), sourceLink.getIsisCircIfIndex());
             OnmsSnmpInterface targetSnmpInterface = getSnmpInterface(targetLink.getNode().getId(), targetLink.getIsisCircIfIndex());
             connectVertices(getDefaultEdgeId(sourceLink.getId(), targetLink.getId()),
@@ -330,7 +330,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
                 sourceSnmpInterface, targetSnmpInterface,
                 targetLink.getIsisISAdjNeighSNPAAddress(),
                 sourceLink.getIsisISAdjNeighSNPAAddress(),
-                Topology.ProtocolSupported.ISIS);
+                ProtocolSupported.ISIS);
         }
     }
 
@@ -355,7 +355,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
         Map<BridgePort,LinkdVertex> portToVertexMap = new HashMap<BridgePort, LinkdVertex>();
         for (BridgePort bp : segment.getBridgePortsOnSegment()) {
             LinkdVertex vertex = (LinkdVertex)getVertex(TOPOLOGY_NAMESPACE_LINKD, bp.getNodeId().toString());
-            vertex.getProtocolSupported().add(Topology.ProtocolSupported.BRIDGE);
+            vertex.getProtocolSupported().add(ProtocolSupported.BRIDGE);
             portToVertexMap.put(bp,vertex);
         }
         
@@ -365,21 +365,21 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
            OnmsSnmpInterface targetsnmpIface = m_macToOnmsSnmpMap.get(mac);
            if (targetsnmpIface != null) {
                LinkdVertex vertex = (LinkdVertex)getVertex(TOPOLOGY_NAMESPACE_LINKD, targetsnmpIface.getNode().getNodeId());
-               vertex.getProtocolSupported().add(Topology.ProtocolSupported.BRIDGE);
+               vertex.getProtocolSupported().add(ProtocolSupported.BRIDGE);
                macToVertexMap.put(mac,vertex);
                continue;
            }
            OnmsIpInterface targetipIface = m_macToOnmsIpMap.get(mac);
            if (targetipIface != null) {
                LinkdVertex vertex = (LinkdVertex)getVertex(TOPOLOGY_NAMESPACE_LINKD, targetipIface.getNode().getNodeId());
-               vertex.getProtocolSupported().add(Topology.ProtocolSupported.BRIDGE);
+               vertex.getProtocolSupported().add(ProtocolSupported.BRIDGE);
                macToVertexMap.put(mac,vertex);
                continue;
            }
            if (m_macToNodeidMap.containsKey(mac)) {
                Integer nodeid = m_macToNodeidMap.get(mac);
                LinkdVertex vertex = (LinkdVertex)getVertex(TOPOLOGY_NAMESPACE_LINKD, nodeid.toString());
-               vertex.getProtocolSupported().add(Topology.ProtocolSupported.BRIDGE);
+               vertex.getProtocolSupported().add(ProtocolSupported.BRIDGE);
                macToVertexMap.put(mac,vertex);
                continue;
            }
@@ -408,7 +408,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
                             sourceSnmpInterface,targetSnmpInterface,
                             "bp: "+sourcebp.getBridgePort(),
                             "bp: "+targetbp.getBridgePort(),
-                            Topology.ProtocolSupported.BRIDGE);
+                            ProtocolSupported.BRIDGE);
             return;
         }
         if (portToVertexMap.size() == 1 && 
@@ -433,7 +433,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
             connectVertices(getEdgeId(sourcebp, targetmac), source, target,sourceinterface,targetinterface,
                             "bp: "+sourcebp.getBridgePort(),
                             targetAddr.toString(),
-                            Topology.ProtocolSupported.BRIDGE);
+                            ProtocolSupported.BRIDGE);
             return;
         }
         LinkdVertex topVertex = portToVertexMap.get(segment.getDesignatedPort());
@@ -452,7 +452,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
             OnmsSnmpInterface targetinterface = getSnmpInterface(bp.getNodeId(), bp.getBridgePortIfIndex());
             connectVertices(getEdgeId(cloudVertex, bp), cloudVertex, bpportvertex, null, targetinterface, 
                             "shared segment: up bridge " + topVertex.getLabel() + " bp:" + segment.getDesignatedPort().getBridgePort(),
-                            "bp: "+bp.getBridgePort(), Topology.ProtocolSupported.BRIDGE);
+                            "bp: "+bp.getBridgePort(), ProtocolSupported.BRIDGE);
             
         }
         for (String mac: macToVertexMap.keySet()) {
@@ -470,7 +470,7 @@ public class LinkdTopologyProvider extends AbstractTopologyProvider implements G
             connectVertices(getEdgeId(cloudVertex, mac), cloudVertex,target, null, 
                             targetiface,
                             "shared segment: up bridge " + topVertex.getLabel() + " bp:" + segment.getDesignatedPort().getBridgePort(),
-                            targetAddr.toString(), Topology.ProtocolSupported.BRIDGE);
+                            targetAddr.toString(), ProtocolSupported.BRIDGE);
         }
     }
 

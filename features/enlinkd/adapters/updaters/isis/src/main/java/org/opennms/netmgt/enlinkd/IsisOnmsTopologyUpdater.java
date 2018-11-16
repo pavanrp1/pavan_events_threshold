@@ -34,8 +34,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.opennms.netmgt.enlinkd.model.IsIsLink;
 import org.opennms.netmgt.enlinkd.service.api.IsisTopologyService;
 import org.opennms.netmgt.enlinkd.service.api.NodeTopologyService;
-import org.opennms.netmgt.enlinkd.service.api.Topology;
-import org.opennms.netmgt.enlinkd.service.api.Topology.ProtocolSupported;
+import org.opennms.netmgt.enlinkd.service.api.ProtocolSupported;
 import org.opennms.netmgt.events.api.EventForwarder;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.topologies.service.api.OnmsTopology;
@@ -92,12 +91,12 @@ public class IsisOnmsTopologyUpdater extends EnlinkdOnmsTopologyUpdater {
 
     @Override
     public String getId() {
-        return Topology.ProtocolSupported.ISIS.name();
+        return ProtocolSupported.ISIS.name();
     }
 
     @Override
     public String getProtocol() {
-        return Topology.ProtocolSupported.ISIS.name();
+        return ProtocolSupported.ISIS.name();
     }
             
 }

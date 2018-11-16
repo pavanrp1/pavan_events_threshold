@@ -53,7 +53,7 @@ import org.opennms.netmgt.model.OnmsNode;
 @Entity
 @Table(name="bridgeMacLink")
 @Filter(name=FilterManager.AUTH_FILTER_NAME, condition="exists (select distinct x.nodeid from node x join category_node cn on x.nodeid = cn.nodeid join category_group cg on cn.categoryId = cg.categoryId where x.nodeid = nodeid and cg.groupId in (:userGroups))")
-public class BridgeMacLink implements Serializable {
+public class BridgeMacLink implements Serializable{
 
     
     /**
@@ -263,5 +263,6 @@ public class BridgeMacLink implements Serializable {
 		else 
 		    setBridgeMacLinkLastPollTime(element.getBridgeMacLinkLastPollTime());
 	}
+
 	
 }

@@ -35,8 +35,7 @@ import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.enlinkd.model.OspfLink;
 import org.opennms.netmgt.enlinkd.service.api.NodeTopologyService;
 import org.opennms.netmgt.enlinkd.service.api.OspfTopologyService;
-import org.opennms.netmgt.enlinkd.service.api.Topology;
-import org.opennms.netmgt.enlinkd.service.api.Topology.ProtocolSupported;
+import org.opennms.netmgt.enlinkd.service.api.ProtocolSupported;
 import org.opennms.netmgt.events.api.EventForwarder;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.topologies.service.api.OnmsTopology;
@@ -92,12 +91,12 @@ public class OspfOnmsTopologyUpdater extends EnlinkdOnmsTopologyUpdater {
 
     @Override
     public String getId() {
-        return Topology.ProtocolSupported.OSPF.name();
+        return ProtocolSupported.OSPF.name();
     }
 
     @Override
     public String getProtocol() {
-        return Topology.ProtocolSupported.OSPF.name();
+        return ProtocolSupported.OSPF.name();
     }
             
 }

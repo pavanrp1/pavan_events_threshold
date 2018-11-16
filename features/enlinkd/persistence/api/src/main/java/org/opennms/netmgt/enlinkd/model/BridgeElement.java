@@ -373,5 +373,5 @@ public class BridgeElement implements Serializable {
 		
 		setBridgeNodeLastPollTime(element.getBridgeNodeCreateTime());
 	}
-
+	
 }

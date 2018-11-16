@@ -346,5 +346,4 @@ public class IsIsLink implements Serializable {
 
             return strb.toString();
         }
-
 }

@@ -38,17 +38,16 @@ import org.opennms.netmgt.enlinkd.model.CdpElement;
 import org.opennms.netmgt.enlinkd.model.CdpLink;
 import org.opennms.netmgt.enlinkd.service.api.CdpTopologyService;
 import org.opennms.netmgt.enlinkd.service.api.NodeTopologyService;
-import org.opennms.netmgt.enlinkd.service.api.Topology;
-import org.opennms.netmgt.enlinkd.service.api.Topology.ProtocolSupported;
+import org.opennms.netmgt.enlinkd.service.api.ProtocolSupported;
 import org.opennms.netmgt.events.api.EventForwarder;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.topologies.service.api.OnmsTopology;
+import org.opennms.netmgt.topologies.service.api.OnmsTopologyDao;
 import org.opennms.netmgt.topologies.service.api.OnmsTopologyEdge;
 import org.opennms.netmgt.topologies.service.api.OnmsTopologyException;
 import org.opennms.netmgt.topologies.service.api.OnmsTopologyMessage;
 import org.opennms.netmgt.topologies.service.api.OnmsTopologyUpdater;
 import org.opennms.netmgt.topologies.service.api.OnmsTopologyVertex;
-import org.opennms.netmgt.topologies.service.api.OnmsTopologyDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -160,12 +159,12 @@ public class BridgeOnmsTopologyUpdater extends Discovery implements OnmsTopology
 
     @Override
     public String getId() {
-        return Topology.ProtocolSupported.CDP.name();
+        return ProtocolSupported.CDP.name();
     }
 
     @Override
     public String getProtocol() {
-        return Topology.ProtocolSupported.CDP.name();
+        return ProtocolSupported.CDP.name();
     }
             
 }

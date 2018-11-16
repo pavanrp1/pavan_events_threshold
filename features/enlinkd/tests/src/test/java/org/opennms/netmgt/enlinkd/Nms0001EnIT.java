@@ -101,7 +101,7 @@ public class Nms0001EnIT extends EnLinkdBuilderITCase {
         Map<Integer,IsIsElement> elementmap = new HashMap<Integer, IsIsElement>();
         for (IsIsElement node: m_isisElementDao.findAll()) {
         	assertNotNull(node);
-        	System.err.println(node);
+        	System.err.println(node.toString());
         	elementmap.put(node.getNode().getId(), node);
         }
 
@@ -127,7 +127,7 @@ public class Nms0001EnIT extends EnLinkdBuilderITCase {
                 if (sourceLink.getIsisISAdjIndex().intValue() == 
                         link.getIsisISAdjIndex().intValue()  ) {
                     targetLink=link;
-                    System.err.println(sourceLink + "<-\n->" + targetLink);
+                    System.err.println(sourceLink.toString() + "<-\n->" + targetLink.toString());
                     count++;
                     break;
                 }
