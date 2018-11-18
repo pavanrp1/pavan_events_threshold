@@ -113,6 +113,9 @@ public class TopologyEntityCacheImpl implements TopologyEntityCache {
     public void refresh(){
         nodeTopologyEntities.refresh(KEY);
         cdpLinkTopologyEntities.refresh(KEY);
+        nodeTopologyEntities.refresh(KEY);
+        isIsLinkTopologyEntities.refresh(KEY);
+        lldpLinkTopologyEntities.refresh(KEY);
     }
 
     private int getCacheDuration(){
