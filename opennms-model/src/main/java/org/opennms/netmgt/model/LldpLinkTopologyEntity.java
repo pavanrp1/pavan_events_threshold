@@ -58,6 +58,19 @@ public class LldpLinkTopologyEntity {
         this.lldpPortIfindex = lldpPortIfindex;
     }
 
+    public LldpLinkTopologyEntity(LldpLink link) {
+        this(link.getId()
+                , link.getNode().getId()
+                , link.getLldpRemChassisId()
+                , link.getLldpRemPortId()
+                , link.getLldpRemPortIdSubType()
+                , link.getLldpPortId()
+                , link.getLldpPortIdSubType()
+                , link.getLldpPortDescr()
+                , link.getLldpPortIfindex()
+        );
+    }
+
     public Integer getId() {
         return id;
     }

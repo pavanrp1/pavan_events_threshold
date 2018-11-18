@@ -46,6 +46,14 @@ public class OspfLinkTopologyEntity {
         this.ospfIfIndex = ospfIfIndex;
     }
 
+    public OspfLinkTopologyEntity(OspfLink link) {
+        this(link.getId()
+                , link.getNode().getId()
+                , link.getOspfIpAddr()
+                , link.getOspfRemIpAddr()
+                , link.getOspfIfIndex());
+    }
+
     public Integer getId() {
         return id;
     }
