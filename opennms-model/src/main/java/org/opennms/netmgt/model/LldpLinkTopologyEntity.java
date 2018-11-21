@@ -32,6 +32,10 @@ import java.util.Objects;
 
 import org.opennms.core.utils.LldpUtils;
 
+/**
+ * This is NOT a Hibernate/JPA entity but rather a lightweight model without less attributes than LldpLink and no lazy
+ * loading. We use it to retrieve link information from the database fast.
+ */
 public class LldpLinkTopologyEntity {
 
     private final Integer id;
@@ -119,21 +123,12 @@ public class LldpLinkTopologyEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LldpLinkTopologyEntity that = (LldpLinkTopologyEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(nodeId, that.nodeId) &&
-                Objects.equals(lldpRemChassisId, that.lldpRemChassisId) &&
-                Objects.equals(lldpRemPortId, that.lldpRemPortId) &&
-                Objects.equals(lldpRemPortIdSubType, that.lldpRemPortIdSubType) &&
-                Objects.equals(lldpPortId, that.lldpPortId) &&
-                Objects.equals(lldpPortIdSubType, that.lldpPortIdSubType) &&
-                Objects.equals(lldpPortDescr, that.lldpPortDescr) &&
-                Objects.equals(lldpPortIfindex, that.lldpPortIfindex);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(id, nodeId, lldpRemChassisId, lldpRemPortId, lldpRemPortIdSubType, lldpPortId, lldpPortIdSubType, lldpPortDescr, lldpPortIfindex);
+        return Objects.hash(id);
     }
 
     @Override

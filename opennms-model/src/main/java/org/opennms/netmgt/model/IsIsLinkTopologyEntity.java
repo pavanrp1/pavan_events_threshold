@@ -30,6 +30,10 @@ package org.opennms.netmgt.model;
 
 import java.util.Objects;
 
+/**
+ * This is NOT a Hibernate/JPA entity but rather a lightweight model without less attributes than IsIsLink and no lazy
+ * loading. We use it to retrieve link information from the database fast.
+ */
 public class IsIsLinkTopologyEntity {
     private final Integer id;
     private final Integer nodeId;
@@ -85,18 +89,13 @@ public class IsIsLinkTopologyEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         IsIsLinkTopologyEntity that = (IsIsLinkTopologyEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(nodeId, that.nodeId) &&
-                Objects.equals(isisISAdjIndex, that.isisISAdjIndex) &&
-                Objects.equals(isisCircIfIndex, that.isisCircIfIndex) &&
-                Objects.equals(isisISAdjNeighSysID, that.isisISAdjNeighSysID) &&
-                Objects.equals(isisISAdjNeighSNPAAddress, that.isisISAdjNeighSNPAAddress);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, nodeId, isisISAdjIndex, isisCircIfIndex, isisISAdjNeighSysID, isisISAdjNeighSNPAAddress);
+        return Objects.hash(id);
     }
 
     @Override
